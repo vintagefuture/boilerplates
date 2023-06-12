@@ -1,19 +1,27 @@
 services:
   foo:
     image: foo
+    restart: no
   bar:
+    container_name: foobar
+    restart: always
     image: bar
-    profiles:
-      - test
-  baz:
-    image: baz
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
     depends_on:
       - bar
-    profiles:
-      - test
-  zot:
-    image: zot
-    depends_on:
-      - bar
-    profiles:
-      - debug
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - my_first_volume/data
+      - my_second_volume/opt
+
+volumes:
+  my_first_volume:
+  my_second_volume:
+  
+networks:
+  default:
+    name: network_default
